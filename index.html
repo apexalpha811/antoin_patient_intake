@@ -10,6 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     :root {
       --teal: #01696f;
@@ -816,8 +817,11 @@
       signatures: new Map(),
       marks: [],
       activeTool: 'X',
-      pendingArrow: null
+      pendingArrow: null,
+      submitting: false
     };
+
+    emailjs.init('ECST0avbU-QAiaQf4');
 
     const headers = `
       <header class="mb-5 border-b border-gray-200 pb-4 text-center">
@@ -1436,22 +1440,18 @@
       return `NewPatientRegistration_${lastName}_${firstName}.${extension}`;
     }
 
-    function setSuccessBanner(action) {
+    function setBanner(kind, en, es) {
       const banner = document.getElementById('successBanner');
       const bannerEn = document.getElementById('successBannerEn');
       const bannerEs = document.getElementById('successBannerEs');
-      const copy = {
-        pdf: {
-          en: 'Your form has been downloaded as a PDF. Please keep the file for your records.',
-          es: 'Su formulario fue descargado como PDF. Por favor conserve el archivo para sus registros.'
-        },
-        submit: {
-          en: 'Your PDF was downloaded and your email app has been opened. Please attach the file and send.',
-          es: 'Su PDF fue descargado y se abrió su aplicación de correo. Por favor adjunte el archivo y envíelo.'
-        }
-      }[action];
-      bannerEn.textContent = copy.en;
-      bannerEs.textContent = copy.es;
+      banner.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-red-50', 'border-red-200', 'text-red-900');
+      banner.classList.add(
+        kind === 'error' ? 'bg-red-50' : 'bg-emerald-50',
+        kind === 'error' ? 'border-red-200' : 'border-emerald-200',
+        kind === 'error' ? 'text-red-900' : 'text-emerald-900'
+      );
+      bannerEn.textContent = en;
+      bannerEs.textContent = es;
       banner.classList.remove('hidden');
     }
 
@@ -1477,40 +1477,83 @@
     }
 
     async function handleFormAction(action, buttonId) {
+      if (state.submitting) return;
       clearAllValidationErrors();
       if (!validateAllPages()) return;
       refreshAutofilledDisplays();
       const button = document.getElementById(buttonId);
       const exportRoot = buildPdfExportRoot();
+      const patientFullName = buildPatientFullName();
       setBusyState(button, true, getBusyLabel(action));
+      state.submitting = true;
       try {
         if (action === 'pdf') {
           await generatePdf(exportRoot);
+          setBanner(
+            'success',
+            'Your form has been downloaded as a PDF. Please keep the file for your records.',
+            'Su formulario fue descargado como PDF. Por favor conserve el archivo para sus registros.'
+          );
+          showPage(5);
         } else {
           await generatePdf(exportRoot);
-          await new Promise(resolve => setTimeout(resolve, 300));
-          openMailto();
+          await sendEmailNotification(patientFullName);
+          setBanner(
+            'success',
+            'Your form was submitted successfully. A PDF copy was downloaded to your device and the office was notified.',
+            'Su formulario fue enviado exitosamente. Se descargó una copia PDF a su dispositivo y se notificó al consultorio.'
+          );
+          showPage(5);
         }
-        await new Promise(resolve => setTimeout(resolve, 300));
-        setSuccessBanner(action);
-        showPage(5);
       } catch (error) {
         console.error(error);
-        alert(`Sorry, ${action.toUpperCase()} export could not be completed. Please try again.`);
+        if (action === 'submit') {
+          setBanner(
+            'error',
+            'The PDF was downloaded, but email notification failed. Please manually email the downloaded PDF to antoinstaff@gmail.com.',
+            'Se descargó el PDF, pero falló la notificación por correo. Por favor envíe manualmente el PDF descargado a antoinstaff@gmail.com.'
+          );
+          openMailto({
+            subject: `New Patient Registration – ${patientFullName}`,
+            body: `Dear Dr. Antoin's Office,\n\nThe patient completed the online bilingual registration form. The PDF was downloaded to the device, but EmailJS notification failed.\n\nPatient Name: ${patientFullName}\n\nPlease attach the downloaded PDF manually and send this message to antoinstaff@gmail.com.\n\n---\n\nEstimado consultorio del Dr. Antoin,\n\nEl paciente completó el formulario bilingüe de registro en línea. El PDF se descargó en el dispositivo, pero falló la notificación por correo.\n\nNombre del paciente: ${patientFullName}\n\nPor favor adjunte manualmente el PDF descargado y envíe este mensaje a antoinstaff@gmail.com.`
+          });
+          showPage(5);
+        } else {
+          alert(`Sorry, ${action.toUpperCase()} export could not be completed. Please try again.`);
+        }
       } finally {
         destroyPdfExportRoot();
         setBusyState(button, false);
+        state.submitting = false;
       }
     }
 
-    function openMailto() {
-      const firstName = document.getElementById('firstName').value.trim();
-      const middleName = document.getElementById('middleName').value.trim();
-      const lastName = document.getElementById('lastName').value.trim();
-      const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
-      const subject = encodeURIComponent(`New Patient Registration - ${fullName}`);
-      const body = encodeURIComponent(`Dear Dr. Antoin's Office,\n\nPlease find the completed new patient registration form attached as a PDF.\n\nPatient Name: ${fullName}\n\nPlease attach the PDF that was just downloaded to your device before sending this email.\n\n---\n\nEstimado consultorio del Dr. Antoin,\n\nAdjunto encontrará el formulario de registro de nuevo paciente completado en formato PDF.\n\nNombre del paciente: ${fullName}\n\nPor favor adjunte el PDF que acaba de descargar antes de enviar este correo.`);
-      window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
+    function buildPatientFullName() {
+      const firstName = document.getElementById('firstName')?.value.trim() || '';
+      const middleName = document.getElementById('middleName')?.value.trim() || '';
+      const lastName = document.getElementById('lastName')?.value.trim() || '';
+      return [firstName, middleName, lastName].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+    }
+
+    async function sendEmailNotification(patientFullName) {
+      if (!window.emailjs?.send) {
+        throw new Error('EmailJS failed to load.');
+      }
+      const patientEmail = document.getElementById('emailAddress')?.value.trim() || '';
+      await emailjs.send('servicee_vts0rn1', 'template_29or87b', {
+        to_email: 'antoinstaff@gmail.com',
+        patient_name: patientFullName,
+        patient_email: patientEmail,
+        message: 'The patient completed the online bilingual registration form. Please review the submitted intake and the downloaded PDF copy.',
+        message_es: 'El paciente completó el formulario bilingüe de registro en línea. Por favor revise el formulario enviado y la copia PDF descargada.'
+      });
+    }
+
+    function openMailto(options = {}) {
+      const fullName = buildPatientFullName();
+      const subject = options.subject || `New Patient Registration - ${fullName}`;
+      const body = options.body || `Dear Dr. Antoin's Office,\n\nPlease find the completed new patient registration form attached as a PDF.\n\nPatient Name: ${fullName}\n\nPlease attach the PDF that was just downloaded to your device before sending this email.\n\n---\n\nEstimado consultorio del Dr. Antoin,\n\nAdjunto encontrará el formulario de registro de nuevo paciente completado en formato PDF.\n\nNombre del paciente: ${fullName}\n\nPor favor adjunte el PDF que acaba de descargar antes de enviar este correo.`;
+      window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
 
     function initDiagrams() {

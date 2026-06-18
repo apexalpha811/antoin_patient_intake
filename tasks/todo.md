@@ -17,3 +17,10 @@
 - Kept the `Save as PDF` and `Submit Form` actions in place.
 - Verified the file still parses cleanly with `node --check`.
 - Stopped before a fresh browser export pass at the user's request.
+
+## 2026-06-17 EmailJS submit update
+
+- Added the EmailJS browser SDK and initialized it with the provided public key.
+- Kept the local PDF download first, then sent the office notification on final submit.
+- Added success and failure banners for the submit path and a manual mailto fallback on EmailJS failure.
+- Verified the inline script still passes `node --check` after the patch.
