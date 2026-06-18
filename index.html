@@ -80,6 +80,15 @@
       box-shadow: 0 0 0 2px rgba(1, 105, 111, 0.22);
     }
 
+    .gm-err-autocomplete {
+      background-image: none !important;
+      padding-right: 0.75rem !important;
+    }
+
+    .pac-container:empty {
+      display: none !important;
+    }
+
     .field.invalid,
     .signature-card.invalid {
       border-color: #dc2626;
@@ -629,6 +638,7 @@
       activeTool: 'X',
       pendingArrow: null,
       placesFailed: false,
+      placesDisabled: false,
       placesLoadStarted: false,
       autocompleteReady: false
     };
@@ -1097,7 +1107,75 @@
         input.readOnly = false;
         input.setAttribute('autocomplete', 'street-address');
         input.removeAttribute('aria-busy');
+        input.classList.remove('pac-target-input', 'gm-err-autocomplete');
+        input.style.backgroundImage = 'none';
+        input.style.paddingRight = '';
       });
+    }
+
+    function hideGoogleAutocompleteArtifacts() {
+      document.querySelectorAll('.pac-container').forEach(container => {
+        container.style.display = 'none';
+        container.innerHTML = '';
+      });
+    }
+
+    function rebindAddressField(input) {
+      if (!input.hasAttribute('data-required')) return;
+      input.addEventListener('input', () => clearInvalid(input));
+      input.addEventListener('change', () => clearInvalid(input));
+    }
+
+    function replaceWithCleanAddressField(input) {
+      const clone = input.cloneNode(true);
+      clone.value = input.value;
+      clone.classList.remove('pac-target-input', 'gm-err-autocomplete');
+      clone.disabled = false;
+      clone.readOnly = false;
+      clone.setAttribute('autocomplete', 'street-address');
+      clone.removeAttribute('aria-busy');
+      clone.style.backgroundImage = 'none';
+      clone.style.paddingRight = '';
+      input.replaceWith(clone);
+      rebindAddressField(clone);
+      return clone;
+    }
+
+    function disableGooglePlaces() {
+      if (state.placesDisabled) return;
+      state.placesDisabled = true;
+      state.placesFailed = true;
+      hideGoogleAutocompleteArtifacts();
+      addressInputs().forEach(input => replaceWithCleanAddressField(input));
+      prepareManualAddressFields();
+    }
+
+    function monitorAddressFieldForGoogleErrors(input) {
+      const failIfBroken = () => {
+        const current = document.getElementById(input.id);
+        if (current && current.classList.contains('gm-err-autocomplete')) {
+          disableGooglePlaces();
+        }
+      };
+      const observer = new MutationObserver(failIfBroken);
+      observer.observe(input, { attributes: true, attributeFilter: ['class', 'style'] });
+      input.addEventListener('input', () => setTimeout(failIfBroken, 50));
+      input.addEventListener('focus', () => setTimeout(failIfBroken, 50));
+    }
+
+    function verifyGooglePlacesService() {
+      if (state.placesFailed || state.placesDisabled) return;
+      if (!window.google || !google.maps || !google.maps.places || !google.maps.places.AutocompleteService) return;
+      try {
+        const service = new google.maps.places.AutocompleteService();
+        service.getPlacePredictions({ input: '123 Main' }, (_predictions, status) => {
+          const ok = google.maps.places.PlacesServiceStatus;
+          if (status === ok.OK || status === ok.ZERO_RESULTS) return;
+          disableGooglePlaces();
+        });
+      } catch (error) {
+        disableGooglePlaces();
+      }
     }
 
     function shouldLoadGooglePlaces() {
@@ -1133,12 +1211,13 @@
 
     function initAutocomplete() {
       prepareManualAddressFields();
-      if (state.placesFailed) return;
+      if (state.placesFailed || state.placesDisabled) return;
       if (!window.google || !google.maps || !google.maps.places) return;
       if (state.autocompleteReady) return;
       state.autocompleteReady = true;
       attachAutocomplete('homeStreet', 'home');
       attachAutocomplete('workStreet', 'work');
+      verifyGooglePlacesService();
     }
 
     function attachAutocomplete(inputId, prefix) {
@@ -1150,6 +1229,7 @@
         const autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], fields: ['address_components', 'formatted_address'] });
         input.disabled = false;
         input.readOnly = false;
+        monitorAddressFieldForGoogleErrors(input);
         autocomplete.addListener('place_changed', () => {
           const place = autocomplete.getPlace();
           const parts = parseAddress(place.address_components || []);
@@ -1159,8 +1239,7 @@
           document.getElementById(`${prefix}Zip`).value = parts.zip;
         });
       } catch (error) {
-        state.placesFailed = true;
-        prepareManualAddressFields();
+        disableGooglePlaces();
       }
     }
 
