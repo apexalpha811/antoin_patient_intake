@@ -490,6 +490,19 @@
         border: 0 !important;
         page-break-after: always;
       }
+
+      body.print-export-mode > *:not(#pdfExportRoot) {
+        display: none !important;
+      }
+
+      body.print-export-mode #pdfExportRoot {
+        position: static !important;
+        left: auto !important;
+        top: auto !important;
+        width: auto !important;
+        overflow: visible !important;
+        pointer-events: none !important;
+      }
     }
   </style>
 </head>
@@ -898,11 +911,22 @@
       document.getElementById('nextBtn').addEventListener('click', () => showPage(state.currentPage + 1));
       document.getElementById('savePdfForm').addEventListener('click', () => handleFormAction('pdf', 'savePdfForm'));
       document.getElementById('submitForm').addEventListener('click', () => handleFormAction('submit', 'submitForm'));
-      document.getElementById('printAgain').addEventListener('click', () => window.print());
+      document.getElementById('printAgain').addEventListener('click', () => printPdfExport());
       document.getElementById('firstName').addEventListener('input', updateNames);
       document.getElementById('middleName').addEventListener('input', updateNames);
       document.getElementById('lastName').addEventListener('input', updateNames);
       document.getElementById('patientDob').addEventListener('input', updateDobDisplays);
+
+      const primaryNameField = Array.from(document.querySelectorAll('section.page[data-page="0"] input')).find(input => {
+        const label = input.previousElementSibling;
+        return label && label.textContent.includes('Primary Name');
+      });
+      if (primaryNameField) {
+        primaryNameField.dataset.autofillMode = 'auto';
+        primaryNameField.addEventListener('input', () => {
+          primaryNameField.dataset.autofillMode = primaryNameField.value.trim() ? 'manual' : 'auto';
+        });
+      }
 
       document.querySelectorAll('[data-single]').forEach(input => {
         input.addEventListener('change', event => {
@@ -965,6 +989,18 @@
       document.querySelectorAll('[data-name-input-display]').forEach(input => {
         input.value = parts.join(' ');
       });
+      syncPrimaryContactName(parts.join(' '));
+    }
+
+    function syncPrimaryContactName(patientName) {
+      const primaryName = Array.from(document.querySelectorAll('section.page[data-page="0"] input')).find(input => {
+        const label = input.previousElementSibling;
+        return label && label.textContent.includes('Primary Name');
+      });
+      if (!primaryName) return;
+      if (primaryName.dataset.autofillMode === 'manual') return;
+      primaryName.value = patientName;
+      primaryName.dataset.autofillMode = 'auto';
     }
 
     function updateDobDisplays() {
@@ -1479,8 +1515,8 @@
     async function handleFormAction(action, buttonId) {
       if (state.submitting) return;
       clearAllValidationErrors();
-      if (!validateAllPages()) return;
       refreshAutofilledDisplays();
+      if (!validateAllPages()) return;
       const button = document.getElementById(buttonId);
       const exportRoot = buildPdfExportRoot();
       const patientFullName = buildPatientFullName();
@@ -1526,6 +1562,21 @@
         setBusyState(button, false);
         state.submitting = false;
       }
+    }
+
+    async function printPdfExport() {
+      if (state.submitting) return;
+      refreshAutofilledDisplays();
+      const exportRoot = buildPdfExportRoot();
+      document.body.classList.add('print-export-mode');
+      const cleanup = () => {
+        document.body.classList.remove('print-export-mode');
+        destroyPdfExportRoot();
+        window.removeEventListener('afterprint', cleanup);
+      };
+      window.addEventListener('afterprint', cleanup, { once: true });
+      await waitForNextPaint();
+      window.print();
     }
 
     function buildPatientFullName() {

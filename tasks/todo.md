@@ -24,3 +24,10 @@
 - Kept the local PDF download first, then sent the office notification on final submit.
 - Added success and failure banners for the submit path and a manual mailto fallback on EmailJS failure.
 - Verified the inline script still passes `node --check` after the patch.
+
+## 2026-06-18 PDF and print follow-up
+
+- Fixed the emergency-contact primary name autofill so it tracks the patient name until manually overridden.
+- Moved autofill refresh ahead of validation so the submit banner can appear instead of stopping on a blank copied field.
+- Swapped the print button to the same hidden 7-page export clone used by PDF download.
+- Verified in the browser that submit now shows the green banner and the print export root resolves to 7 pages.
