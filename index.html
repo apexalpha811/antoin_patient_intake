@@ -1164,18 +1164,28 @@
     }
 
     function verifyGooglePlacesService() {
-      if (state.placesFailed || state.placesDisabled) return;
-      if (!window.google || !google.maps || !google.maps.places || !google.maps.places.AutocompleteService) return;
-      try {
-        const service = new google.maps.places.AutocompleteService();
-        service.getPlacePredictions({ input: '123 Main' }, (_predictions, status) => {
-          const ok = google.maps.places.PlacesServiceStatus;
-          if (status === ok.OK || status === ok.ZERO_RESULTS) return;
+      return new Promise(resolve => {
+        if (state.placesFailed || state.placesDisabled) {
+          resolve(false);
+          return;
+        }
+        if (!window.google || !google.maps || !google.maps.places || !google.maps.places.AutocompleteService) {
+          resolve(false);
+          return;
+        }
+        try {
+          const service = new google.maps.places.AutocompleteService();
+          service.getPlacePredictions({ input: '123 Main' }, (_predictions, status) => {
+            const ok = google.maps.places.PlacesServiceStatus;
+            const healthy = status === ok.OK || status === ok.ZERO_RESULTS;
+            if (!healthy) disableGooglePlaces();
+            resolve(healthy);
+          });
+        } catch (error) {
           disableGooglePlaces();
-        });
-      } catch (error) {
-        disableGooglePlaces();
-      }
+          resolve(false);
+        }
+      });
     }
 
     function shouldLoadGooglePlaces() {
@@ -1209,15 +1219,16 @@
       document.head.appendChild(script);
     }
 
-    function initAutocomplete() {
+    async function initAutocomplete() {
       prepareManualAddressFields();
       if (state.placesFailed || state.placesDisabled) return;
       if (!window.google || !google.maps || !google.maps.places) return;
       if (state.autocompleteReady) return;
+      const placesHealthy = await verifyGooglePlacesService();
+      if (!placesHealthy || state.placesDisabled) return;
       state.autocompleteReady = true;
       attachAutocomplete('homeStreet', 'home');
       attachAutocomplete('workStreet', 'work');
-      verifyGooglePlacesService();
     }
 
     function attachAutocomplete(inputId, prefix) {
