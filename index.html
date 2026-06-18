@@ -305,7 +305,6 @@
       }
     }
   </style>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3E_aJNH6OCOBfINlw7tGXWGNshWSBXZk&libraries=places&callback=initAutocomplete&loading=async" async defer></script>
 </head>
 <body>
   <nav class="no-print sticky top-0 z-50 bg-white shadow-sm">
@@ -389,7 +388,7 @@
           <div>
             <h2 class="section-title">Home Address<span class="es">Dirección de Casa</span></h2>
             <div class="grid gap-3 md:grid-cols-6">
-              <div class="md:col-span-2"><label class="label-main">Street<span class="es">Calle</span></label><input id="homeStreet" class="field mt-2" data-required data-page-index="0"></div>
+              <div class="md:col-span-2"><label class="label-main">Street<span class="es">Calle</span></label><input id="homeStreet" class="field mt-2" autocomplete="street-address" data-required data-page-index="0"></div>
               <div class="md:col-span-2"><label class="label-main">Additional Street<span class="es">Dirección adicional</span></label><input id="homeStreet2" class="field mt-2"></div>
               <div><label class="label-main">City<span class="es">Ciudad</span></label><input id="homeCity" class="field mt-2"></div>
               <div><label class="label-main">State<span class="es">Estado</span></label><input id="homeState" class="field mt-2" maxlength="2"></div>
@@ -406,7 +405,7 @@
           <div>
             <h2 class="section-title">Work Address<span class="es">Dirección de Trabajo</span></h2>
             <div class="grid gap-3 md:grid-cols-6">
-              <div class="md:col-span-2"><label class="label-main">Street<span class="es">Calle</span></label><input id="workStreet" class="field mt-2"></div>
+              <div class="md:col-span-2"><label class="label-main">Street<span class="es">Calle</span></label><input id="workStreet" class="field mt-2" autocomplete="street-address"></div>
               <div class="md:col-span-2"><label class="label-main">Additional Street<span class="es">Dirección adicional</span></label><input id="workStreet2" class="field mt-2"></div>
               <div><label class="label-main">City<span class="es">Ciudad</span></label><input id="workCity" class="field mt-2"></div>
               <div><label class="label-main">State<span class="es">Estado</span></label><input id="workState" class="field mt-2" maxlength="2"></div>
@@ -629,6 +628,8 @@
       marks: [],
       activeTool: 'X',
       pendingArrow: null,
+      placesFailed: false,
+      placesLoadStarted: false,
       autocompleteReady: false
     };
 
@@ -681,7 +682,8 @@
       bindEvents();
       showPage(0);
       updateNames();
-      initAutocomplete();
+      prepareManualAddressFields();
+      loadGooglePlacesOptional();
     }
 
     function renderConsent() {
@@ -1083,7 +1085,55 @@
       });
     }
 
+    function addressInputs() {
+      return ['homeStreet', 'workStreet']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+    }
+
+    function prepareManualAddressFields() {
+      addressInputs().forEach(input => {
+        input.disabled = false;
+        input.readOnly = false;
+        input.setAttribute('autocomplete', 'street-address');
+        input.removeAttribute('aria-busy');
+      });
+    }
+
+    function shouldLoadGooglePlaces() {
+      if (!GOOGLE_PLACES_KEY) return false;
+      if (!window.location) return false;
+      return window.location.protocol !== 'file:';
+    }
+
+    function loadGooglePlacesOptional() {
+      if (state.placesLoadStarted) return;
+      if (!shouldLoadGooglePlaces()) {
+        state.placesFailed = true;
+        prepareManualAddressFields();
+        return;
+      }
+      state.placesLoadStarted = true;
+
+      window.gm_authFailure = () => {
+        state.placesFailed = true;
+        prepareManualAddressFields();
+      };
+
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_PLACES_KEY}&libraries=places&callback=initAutocomplete&loading=async`;
+      script.async = true;
+      script.defer = true;
+      script.onerror = () => {
+        state.placesFailed = true;
+        prepareManualAddressFields();
+      };
+      document.head.appendChild(script);
+    }
+
     function initAutocomplete() {
+      prepareManualAddressFields();
+      if (state.placesFailed) return;
       if (!window.google || !google.maps || !google.maps.places) return;
       if (state.autocompleteReady) return;
       state.autocompleteReady = true;
@@ -1094,8 +1144,12 @@
     function attachAutocomplete(inputId, prefix) {
       const input = document.getElementById(inputId);
       if (!input) return;
+      input.disabled = false;
+      input.readOnly = false;
       try {
         const autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], fields: ['address_components', 'formatted_address'] });
+        input.disabled = false;
+        input.readOnly = false;
         autocomplete.addListener('place_changed', () => {
           const place = autocomplete.getPlace();
           const parts = parseAddress(place.address_components || []);
@@ -1105,7 +1159,8 @@
           document.getElementById(`${prefix}Zip`).value = parts.zip;
         });
       } catch (error) {
-        input.removeAttribute('aria-busy');
+        state.placesFailed = true;
+        prepareManualAddressFields();
       }
     }
 
