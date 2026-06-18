@@ -1113,7 +1113,6 @@
       return value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
     }
 
-    window.initAutocomplete = initAutocomplete;
     window.addEventListener('load', init);
     window.addEventListener('resize', resizeAllSignaturePads);
   </script>
