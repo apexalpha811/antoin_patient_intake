@@ -632,7 +632,6 @@
         display: block !important;
         box-shadow: none !important;
         border: 0 !important;
-        page-break-after: always;
       }
 
       body.print-export-mode > *:not(#pdfExportRoot) {
@@ -646,6 +645,209 @@
         width: auto !important;
         overflow: visible !important;
         pointer-events: none !important;
+      }
+
+      /* ───────────────────────────────────────────────────────────────
+         OPTION A — native print of the LIVE form.
+         When <body class="printing-live"> is set (via the Print button or
+         Ctrl+P during that window), every wizard page expands, buttons/nav
+         vanish, and the browser's real layout engine paginates the form.
+         Result: print/Save-as-PDF looks identical to the on-screen form.
+         Target: 6–7 pages. Content flows naturally; only .new-page forces
+         a break, and break-inside:avoid is used sparingly to avoid white gaps.
+         ─────────────────────────────────────────────────────────────── */
+      body.printing-live {
+        background: #fff !important;
+        font-size: 10px;
+        line-height: 1.3;
+        color: #000;
+      }
+
+      body.printing-live main {
+        max-width: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* Expand every wizard page; let content FLOW across page boundaries.
+         No forced breaks anywhere — packing density is the priority. */
+      body.printing-live .page {
+        display: block !important;
+        box-shadow: none !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 18px 2px !important;
+        margin: 0 !important;
+      }
+
+      body.printing-live .page.new-page {
+        /* No forced breaks — content packs to fill each page. */
+      }
+
+      /* ── SHAPE SHRINKS (font stays readable) ── */
+
+      /* The 117px practice header repeats on every page (6x = ~700px).
+         Print it ONCE, at the very top, hide the rest. */
+      body.printing-live .page:not(:first-child) [data-header] {
+        display: none !important;
+      }
+      body.printing-live .page:first-child [data-header] {
+        margin-bottom: 4px !important;
+        padding-bottom: 4px !important;
+      }
+      body.printing-live [data-header] header {
+        margin-bottom: 4px !important;
+        padding-bottom: 4px !important;
+      }
+      body.printing-live [data-header] .text-2xl {
+        font-size: 14px !important;
+      }
+
+      /* Signature cards render 200px because they show interactive chrome:
+         Type/Draw/Touch buttons, clear button, plus the canvas. In print none
+         of that is usable — show only the signature image + label. */
+      body.printing-live .signature-card {
+        padding: 4px 6px !important;
+        border-radius: 2px !important;
+        background: #fff !important;
+        border: 1px solid #9ca3af !important;
+      }
+      body.printing-live .signature-card .sig-mode,
+      body.printing-live .signature-card [data-clear-signature],
+      body.printing-live .signature-card .label-main .es {
+        /* keep label EN, hide ES dup + buttons */
+      }
+      body.printing-live .signature-card [data-mode],
+      body.printing-live .signature-card [data-clear-signature] {
+        display: none !important;
+      }
+      body.printing-live .signature-card .typed-signature {
+        font-size: 13px !important;
+        min-height: 20px !important;
+        margin-top: 2px !important;
+        border: 0 !important;
+        padding: 0 2px !important;
+      }
+      body.printing-live .signature-card .signature-canvas {
+        height: 34px !important;
+        margin-top: 2px !important;
+        border-radius: 1px !important;
+      }
+      body.printing-live .signature-card .initials-canvas {
+        height: 26px !important;
+      }
+      body.printing-live .signature-card .mt-3 {
+        margin-top: 2px !important;
+      }
+
+      /* Body pain diagram: 600px tall is half a page. Shrink the shape. */
+      body.printing-live .diagram-wrap {
+        min-height: 240px !important;
+        max-height: 280px !important;
+        aspect-ratio: 761 / 582;
+        margin: 4px auto !important;
+      }
+
+      /* Date highlight boxes (9 instances). Compact the shape, keep text. */
+      body.printing-live .date-highlight {
+        background: #fff !important;
+        border: 1px solid #9ca3af !important;
+        padding: 4px 6px !important;
+        border-radius: 2px !important;
+      }
+      body.printing-live .date-highlight .es {
+        margin-top: 1px;
+      }
+
+      /* Fields: keep readable, just trim padding. */
+      body.printing-live .field,
+      body.printing-live .name-display {
+        min-height: 20px !important;
+        padding: 2px 5px !important;
+        border-radius: 2px !important;
+        box-shadow: none !important;
+        background: #fff !important;
+      }
+
+      body.printing-live .es {
+        font-size: 8px;
+        line-height: 1.15;
+        margin-top: 1px;
+      }
+
+      body.printing-live .section-title {
+        margin: 4px 0 2px;
+        padding-bottom: 1px;
+        font-size: 12px;
+      }
+
+      body.printing-live h1.section-title {
+        font-size: 14px;
+        margin-top: 2px;
+      }
+
+      body.printing-live .label-main {
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      /* Tighter grids for print — force multi-column layout regardless of
+         viewport width (browser margins shrink usable width below md: 768px
+         breakpoint, so Tailwind responsive grid classes collapse to 1-col). */
+      body.printing-live .grid {
+        display: grid !important;
+        gap: 5px !important;
+      }
+      body.printing-live .grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+      body.printing-live .sm\:grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+      body.printing-live .sm\:grid-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+      body.printing-live .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+      body.printing-live .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+      body.printing-live .md\:grid-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+      body.printing-live .md\:grid-cols-5 { grid-template-columns: repeat(5, 1fr) !important; }
+      body.printing-live .md\:grid-cols-6 { grid-template-columns: repeat(6, 1fr) !important; }
+      body.printing-live .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+      body.printing-live .md\:col-span-2 { grid-column: span 2 !important; }
+
+      body.printing-live .mt-2 { margin-top: 3px !important; }
+      body.printing-live .mt-3 { margin-top: 3px !important; }
+      body.printing-live .mt-4 { margin-top: 4px !important; }
+      body.printing-live .mt-6 { margin-top: 5px !important; }
+      body.printing-live .mb-2 { margin-bottom: 2px !important; }
+      body.printing-live .mb-3 { margin-bottom: 3px !important; }
+      body.printing-live .mb-4 { margin-bottom: 4px !important; }
+      body.printing-live .mb-5 { margin-bottom: 4px !important; }
+      body.printing-live .gap-3 { gap: 4px !important; }
+      body.printing-live .gap-4 { gap: 5px !important; }
+
+      body.printing-live p {
+        margin: 2px 0;
+      }
+
+      body.printing-live .choice {
+        line-height: 1.2;
+      }
+
+      /* CONSERVATIVE break-inside:avoid — only atomic rows that look
+         broken when split. Avoid applying to large blocks (white gaps). */
+      body.printing-live .signature-block,
+      body.printing-live tr,
+      /* Keep the body pain diagram heading + body image together as one unit;
+         if they don't fit at the bottom of a page, move both to the next page. */
+      body.printing-live #painDiagramSection {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+
+    /* While preparing/finishing the print snapshot, hide the live screen view
+       so the user never sees every page stacked. Only fires on screen, not in
+       the actual print media. */
+    @media screen {
+      body.printing-live #app {
+        visibility: hidden;
       }
     }
   </style>
@@ -942,6 +1144,7 @@
           </div>
           <div class="grid gap-3 md:grid-cols-2">
             <button type="button" id="savePdfForm" class="no-print pdf-exclude export-exclude btn btn-secondary w-full rounded-lg py-4 text-lg">Save as PDF<br><span class="text-sm font-normal">Guardar como PDF</span></button>
+            <button type="button" id="printForm" class="no-print pdf-exclude export-exclude btn btn-secondary w-full rounded-lg py-4 text-lg">Print<br><span class="text-sm font-normal">Imprimir</span></button>
           </div>
           <button type="button" id="submitForm" class="no-print pdf-exclude export-exclude btn btn-primary w-full rounded-lg py-4 text-lg">Submit Form<br><span class="text-sm font-normal">Enviar Formulario</span></button>
         </div>
@@ -1048,6 +1251,7 @@
       document.getElementById('backBtn').addEventListener('click', () => showPage(state.currentPage - 1));
       document.getElementById('nextBtn').addEventListener('click', () => showPage(state.currentPage + 1));
       document.getElementById('savePdfForm').addEventListener('click', () => handleFormAction('pdf', 'savePdfForm'));
+      document.getElementById('printForm').addEventListener('click', () => printLiveForm('printForm'));
       document.getElementById('submitForm').addEventListener('click', () => handleFormAction('submit', 'submitForm'));
       document.getElementById('firstName').addEventListener('input', updateNames);
       document.getElementById('middleName').addEventListener('input', updateNames);
@@ -1270,7 +1474,11 @@
       if (target.dirty) return;
       target.mode = source.mode;
       target.typed = source.typed;
-      target.dirty = source.dirty;
+      // NOTE: do NOT copy source.dirty onto target.dirty here.
+      // target.dirty must only flip true when the USER manually edits THIS
+      // target (via its own input/pointerup handlers). Copying the source's
+      // dirty flag would make the next keystroke hit the early-return above
+      // and freeze the autofill at the first character.
       target.container.querySelector('[data-typed-signature]').value = source.typed;
       target.container.querySelectorAll('[data-mode]').forEach(button => button.classList.toggle('active', button.dataset.mode === source.mode));
       target.container.querySelector('[data-typed-signature]').classList.toggle('hidden', source.mode !== 'type');
@@ -1904,6 +2112,45 @@
         window.removeEventListener('afterprint', cleanup);
       };
       window.addEventListener('afterprint', cleanup, { once: true });
+      await waitForNextPaint();
+      window.print();
+    }
+
+    /**
+     * OPTION A — print the LIVE form directly.
+     * Expands every wizard page, refreshes autofilled displays, sets a body
+     * class that drives the @media print rules, then calls window.print().
+     * The user picks "Save as PDF" in the dialog to get a file identical to
+     * what they see on screen. State is restored on afterprint regardless of
+     * success/cancel so the wizard never gets stuck expanded.
+     */
+    async function printLiveForm(buttonId) {
+      if (state.submitting) return;
+      const button = buttonId ? document.getElementById(buttonId) : null;
+      const previousPageIndex = state.currentPage;
+
+      clearAllValidationErrors();
+      refreshAutofilledDisplays();
+      resizeAllSignaturePads();
+
+      const finish = () => {
+        document.body.classList.remove('printing-live');
+        showPage(previousPageIndex);
+        if (button) setBusyState(button, false, '');
+      };
+
+      if (button) setBusyState(button, true, 'Preparing…<br><span class="text-sm font-normal">Preparando…</span>');
+      document.body.classList.add('printing-live');
+
+      // Briefly force-expand every page so the print layout has full content.
+      document.querySelectorAll('.page').forEach(page => page.classList.add('active'));
+
+      window.addEventListener('afterprint', finish, { once: true });
+      // Safety net: if afterprint never fires (older Safari/Edge), restore after a delay.
+      setTimeout(() => {
+        if (document.body.classList.contains('printing-live')) finish();
+      }, 60000);
+
       await waitForNextPaint();
       window.print();
     }

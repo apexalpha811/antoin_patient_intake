@@ -137,3 +137,39 @@
 - **Current status**: Unresolved. Date/signature autofill fixes and date hint shrink are committed/pushed. Alignment fix is uncommitted and under active investigation.
 - **Next candidates to test**: html2canvas capture options (`backgroundColor`, `scale`, `logging`), baseline-related canvas properties, or whether the export clone’s wrapping block adds offset that only affects certain rows/fields.
 - **Rollback plan**: If structural changes cause side effects, user can revert to commit `542969c` (last known stable date/signature lock state).
+
+## 2026-06-19 Body pain diagram keep-together for print
+
+- **Problem**: In `printing-live` print mode, the body diagram heading ("Front and Back") and the body image could split across a page boundary.
+- **Fix**: Added `break-inside: avoid; page-break-inside: avoid;` to `#painDiagramSection` in the `printing-live` CSS block. Now if the heading+image don't fit at the bottom of a page, both move together to the next page.
+- **Verified**: Section is 833px tall, page content area is 912px at 0.75" margins — fits on one page, no awkward gaps. Page count unchanged (7 @ 0in, 9 @ 0.75in).
+
+## 2026-06-19 Typed-signature autofill freeze (one-character bug)
+
+- **Problem reported**: Draw/Touch signatures autofill correctly, but Type-mode only syncs the first character.
+- **Root cause**: In `cloneSignatureState(source, target)`, the line `target.dirty = source.dirty` copied the source's dirty flag onto the target. The source's `input` handler sets `source.dirty = true` on the very first keystroke, so after the first character sync, every target was marked dirty. The next `syncAutofillSignatures()` call then hit the early-return `if (target.dirty) return;` guard and froze.
+- **Why draw/touch didn't show it**: `pointerup` fires once per completed stroke and copies the whole signature in one go; the dirty-loop never had a chance to block intermediate updates.
+- **Fix**: Removed `target.dirty = source.dirty;` from `cloneSignatureState`. `target.dirty` must only flip true when the USER manually edits THAT target (via its own `input`/`pointerup` handlers), never via autofill. Added an explanatory comment.
+- **Verified**: Playwright test typing "John Doe" character-by-character into the source signature → all 3 target signatures received the full string "John Doe" (previously froze at "J").
+- **No regression**: Draw/Touch sync still works; manual edit of a target still sets its own dirty flag and stops further sync into it; Clear resets dirty and re-enables sync.
+
+## 2026-06-19 Option A — native print of live form (version 2)
+
+- **Goal**: Print/Save-as-PDF looks identical to the on-screen form by using `window.print()` on the live DOM instead of the hidden `#pdfExportRoot` clone.
+- **Implementation**:
+  - Created `body.printing-live` CSS class that expands all wizard `.page` sections, hides buttons/nav, shrinks shapes (body diagram 600→280px, signature cards 200→34px, repeated headers shown once), and trims margins/padding.
+  - Created `printLiveForm()` JS function that adds `printing-live` class, expands all pages, calls `window.print()`, then restores state on `afterprint` event (with 60s safety timeout).
+  - Wired `#printForm` button to `printLiveForm()`. Original `printPdfExport()` still exists but is unwired.
+- **Iteration**:
+  - 18 pages → removed double page breaks (`break-after` on `.page` + `break-before` on `.new-page`) and over-broad `break-inside:avoid`.
+  - 14 pages → removed all remaining forced breaks, added shape shrinks.
+  - 11 pages (Playwright, zero margins) → header deduplication + tighter spacing.
+  - 7 pages (Playwright, zero margins) → removed single `page-break-after: always` on `.page` from generic `@media print` block.
+  - **Grid collapse bug**: User’s browser printed all fields single-column. Root cause: browser default margins (~0.75" = 708px usable) fall below Tailwind `md:` breakpoint (768px), so `md:grid-cols-*` classes collapse to 1-col.
+  - **Grid collapse fix**: Added explicit `grid-template-columns: repeat(N, 1fr) !important` overrides in `body.printing-live` for all Tailwind responsive grid classes (`sm:grid-cols-2`, `sm:grid-cols-4`, `md:grid-cols-2` through `md:grid-cols-6`, `lg:grid-cols-3`, `md:col-span-2`).
+- **Verified results** (all grids multi-column confirmed via Playwright):
+  - Zero margins → 7 pages
+  - 0.5" margins → 8 pages
+  - 0.75" margins (browser default) → 9 pages
+- **Status**: Grid fix applied and Playwright-verified. Awaiting user browser test.
+- **Remaining**: PDF field vertical alignment issue from earlier session still uncommitted/unresolved (html2canvas rasterization, not Option A).
