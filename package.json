@@ -1,0 +1,9 @@
+{
+  "name": "antoin-patient-intake",
+  "version": "1.0.0",
+  "description": "Dr. Antoin Patient Registration Form",
+  "type": "module",
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  }
+}
