@@ -1082,6 +1082,18 @@
         sourceDate.addEventListener('input', sync);
         sourceDate.addEventListener('change', sync);
       }
+      document.querySelectorAll('[data-autofill-target-date]').forEach(input => {
+        const markDirty = () => {
+          if (!input.value) return;
+          const normalized = formatDate(input.value);
+          if (normalized && normalized !== formatDate(source.value)) {
+            input.dataset.dateDirty = 'true';
+          }
+          clearInvalid(input);
+        };
+        input.addEventListener('input', markDirty);
+        input.addEventListener('change', markDirty);
+      });
 
       const sourceSsn = document.querySelector('[data-ssn-source]');
       if (sourceSsn) {
@@ -1247,6 +1259,7 @@
     }
 
     function cloneSignatureState(source, target) {
+      if (target.dirty) return;
       target.mode = source.mode;
       target.typed = source.typed;
       target.dirty = source.dirty;
@@ -1277,8 +1290,14 @@
     function syncAutofillDates() {
       const source = document.querySelector('[data-autofill-source-date]');
       if (!source) return;
-      const value = formatDate(source.value);
+      const sourceValue = formatDate(source.value);
+      const digits = (source.value || '').replace(/\D/g, '').length;
+      if (!sourceValue || digits < 8) return;
+      const value = sourceValue;
       document.querySelectorAll('[data-autofill-target-date]').forEach(input => {
+        const current = formatDate(input.value);
+        if (input.dataset.dateDirty === 'true' && current) return;
+        if (current && current !== value) return;
         input.value = value;
         clearInvalid(input);
       });
