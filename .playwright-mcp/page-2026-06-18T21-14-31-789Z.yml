@@ -1,0 +1,309 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: Hussam Antoin, MD
+          - generic [ref=e7]: New Patient Registration / Registro de Nuevo Paciente
+        - generic [ref=e8]: Step 1 of 6
+      - generic [ref=e9]:
+        - button "Step 1" [ref=e10] [cursor=pointer]: "1"
+        - button "Step 2" [ref=e11] [cursor=pointer]: "2"
+        - button "Step 3" [ref=e12] [cursor=pointer]: "3"
+        - button "Step 4" [ref=e13] [cursor=pointer]: "4"
+        - button "Step 5" [ref=e14] [cursor=pointer]: "5"
+        - button "Step 6" [ref=e15] [cursor=pointer]: "6"
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e20]:
+          - generic [ref=e21]: Hussam Antoin, MD
+          - generic [ref=e22]: Board Certified Fellowship Trained Pain Management & Anesthesiology
+          - generic [ref=e23]: 3831 Hughes Ave. Ste. 700, Culver City, CA 90232
+          - generic [ref=e24]: 310-837-3694 | antoinstaff@gmail.com
+        - heading "New Patient Registration Information Nueva Información de Registro del Paciente" [level=1] [ref=e25]:
+          - text: New Patient Registration Information
+          - generic [ref=e26]: Nueva Información de Registro del Paciente
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - generic [ref=e29]:
+              - text: Patient Name
+              - generic [ref=e30]: Nombre del Paciente
+            - generic [ref=e31]:
+              - generic [ref=e32]:
+                - textbox [ref=e33]
+                - generic [ref=e34]: First Name / Primer Nombre
+              - generic [ref=e35]:
+                - textbox [ref=e36]
+                - generic [ref=e37]: Middle Name / Segundo Nombre
+              - generic [ref=e38]:
+                - textbox [ref=e39]
+                - generic [ref=e40]: Last Name / Apellido
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]:
+                - text: Sex
+                - generic [ref=e44]: Sexo
+              - generic [ref=e45]:
+                - generic [ref=e46] [cursor=pointer]:
+                  - checkbox "M" [ref=e47]
+                  - text: M
+                - generic [ref=e48] [cursor=pointer]:
+                  - checkbox "F" [ref=e49]
+                  - text: F
+            - generic [ref=e50]:
+              - generic [ref=e51]:
+                - text: Date of Birth
+                - generic [ref=e52]: Fecha de Nacimiento
+              - textbox [ref=e53]
+              - generic [ref=e54]: MM/DD/YYYY | MM/DD/AAAA
+            - generic [ref=e55]:
+              - generic [ref=e56]:
+                - text: Age
+                - generic [ref=e57]: Edad
+              - textbox [ref=e58]
+            - generic [ref=e59]:
+              - generic [ref=e60]:
+                - text: Marital Status
+                - generic [ref=e61]: Estado Civil
+              - generic [ref=e62]:
+                - generic [ref=e63] [cursor=pointer]:
+                  - checkbox "S Single Soltero" [ref=e64]
+                  - text: S
+                  - generic [ref=e65]:
+                    - text: Single
+                    - text: Soltero
+                - generic [ref=e66] [cursor=pointer]:
+                  - checkbox "M Married Casado" [ref=e67]
+                  - text: M
+                  - generic [ref=e68]:
+                    - text: Married
+                    - text: Casado
+                - generic [ref=e69] [cursor=pointer]:
+                  - checkbox "D Divorced Divorciado" [ref=e70]
+                  - text: D
+                  - generic [ref=e71]:
+                    - text: Divorced
+                    - text: Divorciado
+                - generic [ref=e72] [cursor=pointer]:
+                  - checkbox "W Widowed Viudo/a" [ref=e73]
+                  - text: W
+                  - generic [ref=e74]:
+                    - text: Widowed
+                    - text: Viudo/a
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - generic [ref=e77]:
+                - text: Social Security
+                - generic [ref=e78]: Seguro Social
+              - textbox [ref=e79]
+            - generic [ref=e80]:
+              - generic [ref=e81]:
+                - text: Cell Phone
+                - generic [ref=e82]: Teléfono Celular
+              - textbox [ref=e83]
+            - generic [ref=e84]:
+              - generic [ref=e85]:
+                - text: Home Phone
+                - generic [ref=e86]: Teléfono de Casa
+              - textbox [ref=e87]
+          - generic [ref=e88]:
+            - heading "Home Address Dirección de Casa" [level=2] [ref=e89]:
+              - text: Home Address
+              - generic [ref=e90]: Dirección de Casa
+            - generic [ref=e91]:
+              - generic [ref=e92]:
+                - generic [ref=e93]:
+                  - text: Street
+                  - generic [ref=e94]: Calle
+                - textbox [ref=e95]
+              - generic [ref=e96]:
+                - generic [ref=e97]:
+                  - text: Additional Street
+                  - generic [ref=e98]: Dirección adicional
+                - textbox [ref=e99]
+              - generic [ref=e100]:
+                - generic [ref=e101]:
+                  - text: City
+                  - generic [ref=e102]: Ciudad
+                - textbox [ref=e103]
+              - generic [ref=e104]:
+                - generic [ref=e105]:
+                  - text: State
+                  - generic [ref=e106]: Estado
+                - textbox [ref=e107]
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - text: Zip Code
+                  - generic [ref=e110]: Código Postal
+                - textbox [ref=e111]
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - generic [ref=e114]:
+                - text: Email Address
+                - generic [ref=e115]: Dirección de Correo Electrónico
+              - textbox [ref=e116]
+            - generic [ref=e117]:
+              - generic [ref=e118]:
+                - text: Occupation
+                - generic [ref=e119]: Ocupación
+              - textbox [ref=e120]
+            - generic [ref=e121]:
+              - generic [ref=e122]:
+                - text: Employer Name
+                - generic [ref=e123]: Nombre del Empleador
+              - textbox [ref=e124]
+          - generic [ref=e125]:
+            - heading "Work Address Dirección de Trabajo" [level=2] [ref=e126]:
+              - text: Work Address
+              - generic [ref=e127]: Dirección de Trabajo
+            - generic [ref=e128]:
+              - generic [ref=e129]:
+                - generic [ref=e130]:
+                  - text: Street
+                  - generic [ref=e131]: Calle
+                - textbox [ref=e132]
+              - generic [ref=e133]:
+                - generic [ref=e134]:
+                  - text: Additional Street
+                  - generic [ref=e135]: Dirección adicional
+                - textbox [ref=e136]
+              - generic [ref=e137]:
+                - generic [ref=e138]:
+                  - text: City
+                  - generic [ref=e139]: Ciudad
+                - textbox [ref=e140]
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - text: State
+                  - generic [ref=e143]: Estado
+                - textbox [ref=e144]
+              - generic [ref=e145]:
+                - generic [ref=e146]:
+                  - text: Zip Code
+                  - generic [ref=e147]: Código Postal
+                - textbox [ref=e148]
+              - generic [ref=e149]:
+                - generic [ref=e150]:
+                  - text: "Phone #"
+                  - generic [ref=e151]: Teléfono
+                - textbox [ref=e152]
+          - generic [ref=e153]:
+            - heading "Emergency Contact Contacto de Emergencia" [level=2] [ref=e154]:
+              - text: Emergency Contact
+              - generic [ref=e155]: Contacto de Emergencia
+            - generic [ref=e156]:
+              - generic [ref=e157]:
+                - generic [ref=e158]:
+                  - text: Primary Name
+                  - generic [ref=e159]: Nombre Primario
+                - textbox [ref=e160]
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - text: Relationship
+                  - generic [ref=e163]: Relación
+                - textbox [ref=e164]
+              - generic [ref=e165]:
+                - generic [ref=e166]:
+                  - text: Phone
+                  - generic [ref=e167]: Teléfono
+                - textbox [ref=e168]
+          - generic [ref=e169]:
+            - heading "Insurance Information Información de Seguro" [level=2] [ref=e170]:
+              - text: Insurance Information
+              - generic [ref=e171]: Información de Seguro
+            - generic [ref=e172] [cursor=pointer]:
+              - checkbox "N/A. Treating on a lien, skip to next page N/A. Tratamiento por gravamen, saltar a la siguiente página" [ref=e173]
+              - generic [ref=e174]:
+                - text: N/A. Treating on a lien, skip to next page
+                - generic [ref=e175]: N/A. Tratamiento por gravamen, saltar a la siguiente página
+            - generic [ref=e176]:
+              - generic [ref=e177]:
+                - generic [ref=e178]:
+                  - text: Insurance
+                  - generic [ref=e179]: Seguro
+                - textbox [ref=e180]
+              - generic [ref=e181]:
+                - generic [ref=e182]:
+                  - text: Name of Insured
+                  - generic [ref=e183]: Nombre del Asegurado
+                - textbox [ref=e184]
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - text: Social Security
+                  - generic [ref=e187]: Seguro Social
+                - textbox [ref=e188]
+              - generic [ref=e189]:
+                - generic [ref=e190]:
+                  - text: Date of Birth
+                  - generic [ref=e191]: Fecha de Nacimiento
+                - textbox [ref=e192]
+                - generic [ref=e193]: MM/DD/YYYY | MM/DD/AAAA
+              - generic [ref=e194]:
+                - generic [ref=e195]:
+                  - text: Relationship
+                  - generic [ref=e196]: Relación
+                - textbox [ref=e197]
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - heading "Additional Information Información Adicional" [level=2] [ref=e200]:
+                - text: Additional Information
+                - generic [ref=e201]: Información Adicional
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - generic [ref=e204]:
+                    - text: Name of Primary Doctor
+                    - generic [ref=e205]: Doctor de Cabecera
+                  - textbox [ref=e206]
+                - generic [ref=e207]:
+                  - generic [ref=e208]:
+                    - text: Referred by
+                    - generic [ref=e209]: Referido por
+                  - textbox [ref=e210]
+            - generic [ref=e211]:
+              - heading "Preferred Pharmacy Farmacia Preferida" [level=2] [ref=e212]:
+                - text: Preferred Pharmacy
+                - generic [ref=e213]: Farmacia Preferida
+              - generic [ref=e214]:
+                - generic [ref=e215]:
+                  - generic [ref=e216]:
+                    - text: Pharmacy Name
+                    - generic [ref=e217]: Nombre de la Farmacia
+                  - textbox [ref=e218]
+                - generic [ref=e219]:
+                  - generic [ref=e220]:
+                    - text: Phone
+                    - generic [ref=e221]: Teléfono
+                  - textbox [ref=e222]
+                - generic [ref=e223]:
+                  - generic [ref=e224]:
+                    - text: Address if Available
+                    - generic [ref=e225]: Dirección si está disponible
+                  - textbox [ref=e226]
+          - generic [ref=e227]:
+            - text: "We need copies of: All insurance cards, including Medicare Card and Your Driver's License"
+            - generic [ref=e228]: "Necesitamos copias de: Todas las tarjetas de seguro, incluyendo la tarjeta de Medicare y su Licencia de Conducir"
+          - generic [ref=e229]:
+            - heading "Assignment of Benefits Asignación de Beneficios" [level=2] [ref=e230]:
+              - text: Assignment of Benefits
+              - generic [ref=e231]: Asignación de Beneficios
+            - paragraph [ref=e232]: I hereby irrevocably assign the insurance benefit payment, both basic and major medical, to which I am entitled to the doctor rendering service. I understand that I am financially responsible for the charges not covered by the assignment. I hereby authorize the doctor rendering service to release my information required in the course of my examination.
+            - paragraph [ref=e233]: Por la presente irrevocablemente asignar el pago de prestaciones de seguros, tanto básica como médico importante, a la que tengo derecho a la prestación de servicio médico. Yo entiendo que soy financiarmente responsable de los cargos no cubiertos por la cesión. Por la presente autorizo a la prestación de servicio médico para liberar mi información requerida en el curso de mi examen.
+            - generic [ref=e234]:
+              - generic [ref=e235]:
+                - generic [ref=e236]:
+                  - text: Insured Signature / Guardian
+                  - generic [ref=e237]: Firma del Asegurado / Tutor
+                - generic [ref=e238]:
+                  - button "✎ Type/Escribir" [ref=e239] [cursor=pointer]
+                  - button "✍ Draw/Dibujar" [ref=e240] [cursor=pointer]
+                  - button "👆 Touch/Tocar" [ref=e241] [cursor=pointer]
+                - textbox [ref=e242]
+                - button "Clear / Limpiar" [ref=e243] [cursor=pointer]
+              - generic [ref=e244]:
+                - generic [ref=e245]:
+                  - text: Date
+                  - generic [ref=e246]: Fecha
+                - textbox [ref=e247]
+                - generic [ref=e248]: MM/DD/YYYY | MM/DD/AAAA
+      - button "Next / Siguiente" [ref=e250] [cursor=pointer]

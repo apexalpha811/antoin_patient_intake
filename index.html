@@ -315,8 +315,7 @@
     .pdf-export-mode .pdf-exclude,
     .pdf-export-mode .no-print,
     .pdf-export-mode button,
-    .pdf-export-mode #progressSteps,
-    .pdf-export-mode #successBanner {
+    .pdf-export-mode #progressSteps {
       display: none !important;
     }
 
@@ -487,8 +486,16 @@
 
     .pdf-export-mode .field {
       min-height: 28px !important;
-      padding: 4px 7px !important;
-      line-height: 1.15 !important;
+      padding: 8px 7px !important;
+      line-height: 1 !important;
+    }
+
+    .pdf-export-mode .name-display {
+      min-height: 28px !important;
+      padding: 8px 7px !important;
+      line-height: 1 !important;
+      display: flex !important;
+      align-items: center !important;
     }
 
     .pdf-export-mode .pdf-static-control {
@@ -498,7 +505,7 @@
       white-space: pre-wrap !important;
       overflow: hidden !important;
       color: #111827 !important;
-      line-height: 1.2 !important;
+      line-height: 1 !important;
     }
 
     .pdf-export-mode .pdf-static-control.pdf-static-textarea {
@@ -658,11 +665,6 @@
   </nav>
 
   <main id="app" class="mx-auto max-w-6xl px-3 py-5 sm:px-5 lg:py-8">
-    <div id="successBanner" class="no-print pdf-exclude export-exclude mb-5 hidden rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
-      <div id="successBannerEn" class="font-bold">Your form has been downloaded as a PDF. Your email app has been opened. Please attach the downloaded PDF and send.</div>
-      <div id="successBannerEs" class="mt-1 text-sm">Su formulario fue descargado como PDF. Se abrió su aplicación de correo. Por favor adjunte el PDF descargado y envíelo.</div>
-      <button type="button" id="printAgain" class="btn btn-secondary pdf-exclude export-exclude mt-3">Print / Download Again<br><span class="text-sm font-normal">Imprimir / Descargar de nuevo</span></button>
-    </div>
 
     <form id="intakeForm" novalidate>
       <section class="page pdf-page pdf-section rounded-lg bg-white p-4 shadow-sm sm:p-6 lg:p-8" data-page="0">
@@ -1047,7 +1049,6 @@
       document.getElementById('nextBtn').addEventListener('click', () => showPage(state.currentPage + 1));
       document.getElementById('savePdfForm').addEventListener('click', () => handleFormAction('pdf', 'savePdfForm'));
       document.getElementById('submitForm').addEventListener('click', () => handleFormAction('submit', 'submitForm'));
-      document.getElementById('printAgain').addEventListener('click', () => printPdfExport());
       document.getElementById('firstName').addEventListener('input', updateNames);
       document.getElementById('middleName').addEventListener('input', updateNames);
       document.getElementById('lastName').addEventListener('input', updateNames);
@@ -1407,7 +1408,7 @@
     }
 
     function isPdfExcluded(node) {
-      return node.matches('.pdf-exclude, .export-exclude, .no-print, button, #progressSteps, #successBanner');
+      return node.matches('.pdf-exclude, .export-exclude, .no-print, button, #progressSteps');
     }
 
     function isCompactPdfGrid(node) {
@@ -1546,7 +1547,7 @@
     }
 
     function normalizePdfClone(root) {
-      root.querySelectorAll('.pdf-exclude, .export-exclude, .no-print, button, #progressSteps, #successBanner').forEach(node => node.remove());
+      root.querySelectorAll('.pdf-exclude, .export-exclude, .no-print, button, #progressSteps').forEach(node => node.remove());
       root.querySelectorAll('.typed-signature').forEach(node => node.remove());
       root.querySelectorAll('.signature-canvas.hidden').forEach(canvas => canvas.classList.remove('hidden'));
       root.querySelectorAll('[data-autoresize]').forEach(textarea => {
@@ -1566,6 +1567,12 @@
         staticNode.className = `${control.className} pdf-static-control${control.tagName === 'TEXTAREA' ? ' pdf-static-textarea' : ''}`;
         staticNode.setAttribute('data-pdf-static', 'true');
         staticNode.style.minHeight = control.offsetHeight ? `${control.offsetHeight}px` : staticNode.style.minHeight;
+        staticNode.style.lineHeight = '1';
+        staticNode.style.display = 'flex';
+        staticNode.style.alignItems = 'center';
+        staticNode.style.justifyContent = 'flex-start';
+        staticNode.style.overflow = 'hidden';
+        staticNode.style.whiteSpace = 'pre-wrap';
         const value = control.tagName === 'SELECT'
           ? (control.selectedOptions[0]?.textContent || control.value || '')
           : control.value || '';
@@ -1799,6 +1806,7 @@
 
     function setBanner(kind, en, es) {
       const banner = document.getElementById('successBanner');
+      if (!banner) return;
       const bannerEn = document.getElementById('successBannerEn');
       const bannerEs = document.getElementById('successBannerEs');
       banner.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-red-50', 'border-red-200', 'text-red-900');

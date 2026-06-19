@@ -1,0 +1,72 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1781817313.7281692,
+    "ast_hash": "55c403f2893d958976c521316a33c53b",
+    "semantic_hash": ""
+  },
+  "api/send-registration.js": {
+    "mtime": 1781818083.3977883,
+    "ast_hash": "61ba1ab9c3d90b3ade97878002dc1666",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-14-31-789Z.yml": {
+    "mtime": 1781817271.7922068,
+    "ast_hash": "74ad54690e50d0f9c108fcfcdd51df56",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1781818099.0153568,
+    "ast_hash": "223d146690c5bc47fb2890c7c3dbc124",
+    "semantic_hash": ""
+  },
+  "tasks/lessons.md": {
+    "mtime": 1781817374.4520977,
+    "ast_hash": "221bd784bd00b25c39c9eb539ff84bd2",
+    "semantic_hash": ""
+  },
+  "tasks/todo.md": {
+    "mtime": 1781817368.7608356,
+    "ast_hash": "f8931152a741108de10e9bd1660dedc8",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-14-42-416Z.png": {
+    "mtime": 1781817282.4198704,
+    "ast_hash": "378aad374050f1d41dd1ac24d43901a9",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-14-57-658Z.png": {
+    "mtime": 1781817297.6614387,
+    "ast_hash": "30fd0c0b20871605e76bcac3bf07dd8f",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-15-13-842Z.png": {
+    "mtime": 1781817313.8459463,
+    "ast_hash": "e12669b953fb02aac444a4320ee4c53a",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-15-23-738Z.png": {
+    "mtime": 1781817323.740143,
+    "ast_hash": "856f41a67dbba76fdd8a20ef55068513",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-15-35-795Z.png": {
+    "mtime": 1781817335.7979064,
+    "ast_hash": "0b3bbe47140bc068f468409659545824",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-15-47-431Z.png": {
+    "mtime": 1781817347.4324207,
+    "ast_hash": "e12669b953fb02aac444a4320ee4c53a",
+    "semantic_hash": ""
+  },
+  ".playwright-mcp/page-2026-06-18T21-15-55-539Z.png": {
+    "mtime": 1781817355.5406084,
+    "ast_hash": "4c14f5d6a32a8518b42e46e51309ff4a",
+    "semantic_hash": ""
+  },
+  "body-front_back.png": {
+    "mtime": 1781811983.2581208,
+    "ast_hash": "7465b0602d3635ec24fe64775bfd39d7",
+    "semantic_hash": ""
+  }
+}

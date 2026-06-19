@@ -1,0 +1,408 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "settings.local.json",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L1",
+      "id": "claude_settings_local",
+      "community": 1,
+      "norm_label": "settings.local.json"
+    },
+    {
+      "label": "permissions",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L2",
+      "id": "claude_settings_local_permissions",
+      "community": 1,
+      "norm_label": "permissions"
+    },
+    {
+      "label": "allow",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L3",
+      "id": "claude_settings_local_permissions_allow",
+      "community": 1,
+      "norm_label": "allow"
+    },
+    {
+      "label": "send-registration.js",
+      "file_type": "code",
+      "source_file": "api/send-registration.js",
+      "source_location": "L1",
+      "id": "api_send_registration",
+      "community": 2,
+      "norm_label": "send-registration.js"
+    },
+    {
+      "label": "handler()",
+      "file_type": "code",
+      "source_file": "api/send-registration.js",
+      "source_location": "L3",
+      "id": "api_send_registration_handler",
+      "community": 2,
+      "norm_label": "handler()"
+    },
+    {
+      "label": "lessons.md",
+      "file_type": "document",
+      "source_file": "tasks/lessons.md",
+      "source_location": "L1",
+      "id": "tasks_lessons",
+      "community": 3,
+      "norm_label": "lessons.md"
+    },
+    {
+      "label": "Lessons",
+      "file_type": "document",
+      "source_file": "tasks/lessons.md",
+      "source_location": "L1",
+      "id": "tasks_lessons_lessons",
+      "community": 3,
+      "norm_label": "lessons"
+    },
+    {
+      "label": "todo.md",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L1",
+      "id": "tasks_todo",
+      "community": 0,
+      "norm_label": "todo.md"
+    },
+    {
+      "label": "2026-06-17 Review",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L1",
+      "id": "tasks_todo_2026_06_17_review",
+      "community": 0,
+      "norm_label": "2026-06-17 review"
+    },
+    {
+      "label": "2026-06-17 PDF export rework",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L9",
+      "id": "tasks_todo_2026_06_17_pdf_export_rework",
+      "community": 0,
+      "norm_label": "2026-06-17 pdf export rework"
+    },
+    {
+      "label": "2026-06-17",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L14",
+      "id": "tasks_todo_2026_06_17",
+      "community": 0,
+      "norm_label": "2026-06-17"
+    },
+    {
+      "label": "2026-06-17 EmailJS submit update",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L21",
+      "id": "tasks_todo_2026_06_17_emailjs_submit_update",
+      "community": 0,
+      "norm_label": "2026-06-17 emailjs submit update"
+    },
+    {
+      "label": "2026-06-18 PDF and print follow-up",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L28",
+      "id": "tasks_todo_2026_06_18_pdf_and_print_follow_up",
+      "community": 0,
+      "norm_label": "2026-06-18 pdf and print follow-up"
+    },
+    {
+      "label": "2026-06-18 PDF pagination repair",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L35",
+      "id": "tasks_todo_2026_06_18_pdf_pagination_repair",
+      "community": 0,
+      "norm_label": "2026-06-18 pdf pagination repair"
+    },
+    {
+      "label": "2026-06-18 Textarea PDF export",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L43",
+      "id": "tasks_todo_2026_06_18_textarea_pdf_export",
+      "community": 0,
+      "norm_label": "2026-06-18 textarea pdf export"
+    },
+    {
+      "label": "2026-06-18 7-page rebuild",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L50",
+      "id": "tasks_todo_2026_06_18_7_page_rebuild",
+      "community": 0,
+      "norm_label": "2026-06-18 7-page rebuild"
+    },
+    {
+      "label": "2026-06-18 PDF cleanup pass",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L56",
+      "id": "tasks_todo_2026_06_18_pdf_cleanup_pass",
+      "community": 0,
+      "norm_label": "2026-06-18 pdf cleanup pass"
+    },
+    {
+      "label": "2026-06-18 Final layout pass",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L62",
+      "id": "tasks_todo_2026_06_18_final_layout_pass",
+      "community": 0,
+      "norm_label": "2026-06-18 final layout pass"
+    },
+    {
+      "label": "2026-06-18 Pain activity compacting",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L68",
+      "id": "tasks_todo_2026_06_18_pain_activity_compacting",
+      "community": 0,
+      "norm_label": "2026-06-18 pain activity compacting"
+    },
+    {
+      "label": "2026-06-18 Body image fit pass",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L74",
+      "id": "tasks_todo_2026_06_18_body_image_fit_pass",
+      "community": 0,
+      "norm_label": "2026-06-18 body image fit pass"
+    },
+    {
+      "label": "2026-06-18 PDF save fix",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L80",
+      "id": "tasks_todo_2026_06_18_pdf_save_fix",
+      "community": 0,
+      "norm_label": "2026-06-18 pdf save fix"
+    },
+    {
+      "label": "2026-06-18 Consent page restore",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L86",
+      "id": "tasks_todo_2026_06_18_consent_page_restore",
+      "community": 0,
+      "norm_label": "2026-06-18 consent page restore"
+    },
+    {
+      "label": "2026-06-18 SSN autofill",
+      "file_type": "document",
+      "source_file": "tasks/todo.md",
+      "source_location": "L92",
+      "id": "tasks_todo_2026_06_18_ssn_autofill",
+      "community": 0,
+      "norm_label": "2026-06-18 ssn autofill"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "claude_settings_local",
+      "target": "claude_settings_local_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "claude_settings_local_permissions",
+      "target": "claude_settings_local_permissions_allow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "api/send-registration.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "api_send_registration",
+      "target": "api_send_registration_handler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/lessons.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tasks_lessons",
+      "target": "tasks_lessons_lessons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_17",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_17_emailjs_submit_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_17_pdf_export_rework",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_17_review",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_7_page_rebuild",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_body_image_fit_pass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_consent_page_restore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_final_layout_pass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_pain_activity_compacting",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_pdf_and_print_follow_up",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_pdf_cleanup_pass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_pdf_pagination_repair",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_pdf_save_fix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_ssn_autofill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tasks/todo.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tasks_todo",
+      "target": "tasks_todo_2026_06_18_textarea_pdf_export",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "86e10697c0c30a00ba85ea2e495d626fd6487199"
+}

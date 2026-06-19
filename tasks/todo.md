@@ -97,3 +97,43 @@
 - Added event listeners to update on input and change events.
 - Integrated sync into `refreshAutofilledDisplays()` for PDF export and submit flows.
 - Verified in browser: patient SSN "123456789" autofilled as "123-45-6789" in insurance section, and changing to "987654321" updated insurance field to "987-65-4321" automatically.
+
+## 2026-06-18 Signature autofill with manual edit lock
+
+- Added a dirty flag to each signature state object in `state.signatures`.
+- The `cloneSignatureState()` function now returns immediately if the target signature is marked dirty, preventing overwrite of user edits.
+- Manual typing or drawing on a patient signature sets `dirty = true`.
+- Clicking the clear button resets `dirty = false` to allow future source syncs.
+- Verified in browser: signature autofill works once, then stops after manual edit; clearing the signature re-enables autofill.
+
+## 2026-06-18 DOB display updates
+
+- Added `updateDobDisplays()` to refresh `[data-dob-display]` elements from `patientDob`.
+- Integrated into `refreshAutofilledDisplays()` so PDF export and submit flows show the latest formatted DOB.
+
+## 2026-06-19 Date autofill dirty-check and partial-entry guard
+
+- Added `dateDirty` dataset attribute to target date inputs, set on manual user edit.
+- `syncAutofillDates()` now skips targets marked as dirty or already containing a valid formatted date.
+- Added source date validation guard: sync is blocked entirely if the source has no valid formatted date.
+- Added 8-raw-digit partial-date propagation guard: partial entries (e.g., "01/27/2") are blocked; only full MM/DD/YYYY entries qualify for sync.
+- Removed temporary debug logging from `updateDobDisplays()`, `syncAutofillDates()`, and `syncAutofillSsn()` before commit.
+- Committed and pushed as `542969c`: "fix patient intake date/signature autofill locking".
+
+## 2026-06-19 Date hint text shrink for live HTML and PDF export
+
+- Added `transform: scale(0.75); transform-origin: top left;` to `.date-highlight .es, input[data-mask="date"] + .es` to shrink date help text in the live HTML view.
+- Extended the same shrink rule into `.pdf-export-mode .es` so PDF exports match the live view.
+- Committed and pushed as `6a6009e`: "shrink date hint text 25% on screen and in PDF".
+
+## 2026-06-19 PDF input field vertical alignment investigation
+
+- **Problem reported**: Text inside input fields in the PDF export appears bottom-weighted / vertically off-center, especially in Patient Name and Social Security fields. Live HTML view looks correct.
+- **Attempted fixes**:
+  - Adjusted PDF `.field` padding and `line-height` from `4px/1.15` to `5px/18px`. No effect.
+  - Switched `.pdf-static-control` from `display:flex` to `display:grid` with `align-items:center`. No effect.
+  - Added explicit inline styles in `convertPdfControlsToStatic()`: `inline-flex`, `align-items:center`, `line-height:1.15`, `white-space:pre-wrap`. No effect.
+- **Key finding**: The misalignment persists across multiple CSS and structural approaches, suggesting the root cause is not simple CSS padding/line-height and may be related to html2canvas rasterization behavior, baseline rendering, or an unexamined layout layer in the export clone.
+- **Current status**: Unresolved. Date/signature autofill fixes and date hint shrink are committed/pushed. Alignment fix is uncommitted and under active investigation.
+- **Next candidates to test**: html2canvas capture options (`backgroundColor`, `scale`, `logging`), baseline-related canvas properties, or whether the export clone’s wrapping block adds offset that only affects certain rows/fields.
+- **Rollback plan**: If structural changes cause side effects, user can revert to commit `542969c` (last known stable date/signature lock state).
